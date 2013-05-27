@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'bcrypt'
 require 'haml'
 require 'sinatra'
 require 'mongo'
@@ -68,21 +67,15 @@ get "/signup" do
 end
 
 post "/signup" do
-    password_salt = BCrypt::Engine.generate_salt
-    password_hash = BCrypt::Engine.hash_secret(params[:password], password_salt)
 
-    username = params[:username].gsub /[^a-z0-9\-]+/i, '_'
+    username = params[:username]
 
-    if $users.find_one({:user => params[:username]})
+    if user_m.find_by_name(username)
         redirect "/login"
     end
 
     # save into mongodb
-    $users.insert({
-        :user => username,
-        :salt => password_salt,
-        :passwordhash => password_hash 
-    })
+    user_m.create(username, params[:password])
 
     session[:username] = username
 
