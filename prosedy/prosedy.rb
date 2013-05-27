@@ -1,4 +1,6 @@
+require 'rubygems'
 require 'pathname'
+require 'mongo'
 
 class Prosedy
     attr_reader :db, :data_dir

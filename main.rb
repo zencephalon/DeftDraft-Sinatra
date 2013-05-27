@@ -1,21 +1,16 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'haml'
 require 'sinatra'
-require 'mongo'
 
 require_relative './prosedy/draft'
 require_relative './prosedy/user'
+require_relative './prosedy/prosedy'
 
 enable :sessions
 
 $prosedy = Prosedy.new
 $user_m = UserManager.new($prosedy)
-
-$client = Mongo::MongoClient.new('localhost', 27017)
-$db = $client.db('storiesarealive')
-$drafts = $db.collection('drafts')
 
 DATA_DIR = "./data"
 
