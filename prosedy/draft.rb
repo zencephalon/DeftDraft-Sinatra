@@ -1,3 +1,5 @@
+Draft = Struct.new :id, :user_id, :title, :content
+
 class DraftManager
     attr_accessor :content, :draft
 
