@@ -1,7 +1,7 @@
 require "rubygems"
 require 'bcrypt'
 
-User = Struct.new :id, :name
+User = Struct.new :id, :name, :pw_hash, :pw_salt
 
 class UserManager
     def initialize(prosedy)
@@ -22,10 +22,16 @@ class UserManager
         `mkdir #{@prosedy.data_dir}/#{user_id}`
     end
 
+    def login(name, password)
+        user = find_by_name(name)
+        return (user && user.pw_hash == BCrypt::Engine.hash_secret(password, user.pw_salt))
+    end
+
     def find_by_name(name)
-        result = @user_db.find_one({name: name})
-        if result
-            User.new(result['id'], result['name']);
+        if result = @user_db.find_one({name: name})
+            return User.new(result['id'], result['name'], result['pw_hash'], result['pw_salt']);
+        else 
+            return nil
         end
     end
 end

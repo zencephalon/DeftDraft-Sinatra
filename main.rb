@@ -10,10 +10,13 @@ require_relative './prosedy/user'
 
 enable :sessions
 
+$prosedy = Prosedy.new
+$user_m = UserManager.new($prosedy)
+
 $client = Mongo::MongoClient.new('localhost', 27017)
 $db = $client.db('storiesarealive')
-$users = $db.collection('users')
 $drafts = $db.collection('drafts')
+
 DATA_DIR = "./data"
 
 helpers do
@@ -67,21 +70,16 @@ get "/signup" do
 end
 
 post "/signup" do
-
     username = params[:username]
 
-    if user_m.find_by_name(username)
+    if $user_m.find_by_name(username)
         redirect "/login"
     end
 
     # save into mongodb
-    user_m.create(username, params[:password])
+    $user_m.create(username, params[:password])
 
     session[:username] = username
-
-    # create the directory where we will store git repos for the user
-    `mkdir #{DATA_DIR}`
-    `mkdir #{DATA_DIR}/#{username}`
 
     redirect "/"
 end
@@ -91,13 +89,12 @@ get "/login" do
 end
 
 post "/login" do
-    if user = $users.find_one({:name => params[:username]})
-        if user["passwordhash"] == BCrypt::Engine.hash_secret(params[:password], user["salt"])
-            session[:username] = params[:username]
-            redirect "/"
-        end
+    if $user_m.login(params[:username], params[:password])
+        session[:username] = params[:username]
+        redirect "/"
+    else
+        liquid :login_error
     end
-    liquid :login_error
 end
 
 get "/logout" do
