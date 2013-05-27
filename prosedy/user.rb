@@ -6,13 +6,11 @@ User = Struct.new :id, :name, :pw_hash, :pw_salt
 class UserManager
     def initialize(prosedy)
         @prosedy = prosedy
-        @mongo_db = @prosedy.db
-        @user_db = @mongo_db.collection('users')
-        @prosedy_db = @mongo_db.collection('prosedy')
+        @user_db = @prosedy.db.collection('users')
     end
 
     def create(name, password)
-        user_id = @prosedy_db.find_and_modify(:query => {:name => "data"}, :update => {"$inc" => {"users" => 1}}, :new => true)['users']
+        user_id = @prosedy.increment_user_count
 
         password_salt = BCrypt::Engine.generate_salt
         password_hash = BCrypt::Engine.hash_secret(password, password_salt)
