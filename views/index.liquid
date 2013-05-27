@@ -1,0 +1,11 @@
+{% if logged_in %}
+Welcome {{ user }}!
+
+You can <a href="/draft/new">start a new draft</a>.
+
+You can <a href="/logout">logout</a>.
+{% else %}
+Welcome!
+
+You can <a href="/login">login</a> or <a href="/signup">signup</a>.
+{% endif %}
