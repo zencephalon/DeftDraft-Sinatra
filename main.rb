@@ -44,13 +44,13 @@ get "/" do
 end
 
 put "/draft", :auth => :user do
-    draft = Draft.new(username, params[:title], params[:content])
+    draft = DraftManager.new(username, params[:title], params[:content])
     draft.create
     redirect '/'
 end
 
 get "/draft", :auth => :user do
-    drafts = Draft.get_drafts(username)
+    drafts = DraftManager.get_drafts(username)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
 
@@ -59,7 +59,7 @@ get "/draft/new", :auth => :user do
 end
 
 get "/draft/:num", :auth => :user do
-    draft = Draft.get_draft(username, params[:num].to_i)
+    draft = DraftManager.get_draft(username, params[:num].to_i)
     liquid :draft_display, :locals => { :title => draft.draft, :text => draft.content }
 end
 

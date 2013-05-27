@@ -1,4 +1,4 @@
-class Draft
+class DraftManager
     attr_accessor :content, :draft
 
     def initialize(user, draft, content)
@@ -29,7 +29,7 @@ class Draft
         draft = $drafts.find_one({:user => user, :num => num})
         return nil if draft.nil? 
         draft['content'] = File.open("#{draft['dir']}/draft.textile").read
-        return Draft.new(user, draft['draft'], draft['content'])
+        return self.new(user, draft['draft'], draft['content'])
     end
 
     def self.get_drafts(user)
