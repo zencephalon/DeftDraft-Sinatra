@@ -7,6 +7,7 @@ require 'mongo'
 require_relative './prosedy/prosedy'
 
 enable :sessions
+set :bind, '0.0.0.0'
 
 $prosedy = Prosedy.new(Mongo::MongoClient.new('localhost', 27017))
 $user_m = $prosedy.user_m
@@ -40,26 +41,26 @@ end
 
 # ====================== Drafts ===============================================
 
-post "/d", :auth => :user do
+post "/draft", :auth => :user do
     $draft_m.create(user.id, params[:title], params[:deft])
     redirect '/'
 end
 
-get "/d", :auth => :user do
+get "/draft", :auth => :user do
     drafts = $draft_m.get_by_uid(user.id)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
 
-get "/d/new", :auth => :user do
+get "/draft/new", :auth => :user do
     liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
 end
 
-get "/d/:num", :auth => :user do
+get "/draft/:num", :auth => :user do
     draft = $draft_m.get(user.id, params[:num].to_i)
     liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
 end
 
-get "/d/:num/view", :auth => :user do
+get "/draft/:num/view", :auth => :user do
     draft = $draft_m.get(user.id, params[:num].to_i)
     liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
 end
