@@ -1,5 +1,5 @@
 <ul>
 {% for draft in drafts %}
-    <li>{{ draft.title }}</li>
+    <li><a href="/draft/{{draft.num}}">{{ draft.title }}</a></li>
 {% endfor %}
 </ul>
