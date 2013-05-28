@@ -167,7 +167,7 @@ function left() {
 }
 
 function status() {
-    status2();
+    status1();
 }
 
 function status1() {
@@ -187,6 +187,13 @@ function bind(sc, f) {
         f();
         status();
     });
+}
+
+Mousetrap.stopCallback = function(e, element, combo) {
+    if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
+        return false;
+    }
+    return true;
 }
 
 //bind('ctrl+h', function() { left(); });

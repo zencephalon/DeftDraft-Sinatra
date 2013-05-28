@@ -10,6 +10,9 @@ body {
     height: 30em;
     position: relative;
 }
+#title {
+    background-color: #eeeedd;
+}
 #buffers {
     text-align: right;
 }
