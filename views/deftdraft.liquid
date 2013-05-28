@@ -7,15 +7,17 @@
 <title>DeftDraft</title>
 
 <script src="/js/dd/mousetrap.min.js"></script>
+<!-- include jQuery library -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 <link rel="stylesheet" href="/css/dd/dd-style.css">
 
 </head>
 <body>
     <div id="container">
         <h2>DD - <span id="buffers">Draft: <b>1</b>/1 - Commit: 0</span></h2>
-        <textarea class="textarea mousetrap" id="deft"></textarea>
+        <textarea class="textarea mousetrap" id="deft" name="deft" placeholder="Once upon a time in a land far, far away...">{{text}}</textarea>
         <div id="sidebar">
-            <input type="text" id="title" name="title" value="your title here">
+            <input type="text" id="title" name="title" placeholder="The Story without a Title" value="{{title}}">
             <input type="submit" value="Submit draft!" />
             <p>Welcome. <em>DD</em> has two unique concepts you need to know about: drafts and commits.</p>
             <p>Type some text. Then <em>hit ctrl-space</em>. You used the <b>scratch</b> command which: saves the current draft, starts a new draft at the last commit.</p>

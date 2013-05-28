@@ -196,6 +196,11 @@ Mousetrap.stopCallback = function(e, element, combo) {
     return true;
 }
 
+    $("#title").focus(function() {
+        this.select();
+    });
+
+
 //bind('ctrl+h', function() { left(); });
 bind('ctrl+l', function() { right(); });
 bind('ctrl+h', function() { left(); });

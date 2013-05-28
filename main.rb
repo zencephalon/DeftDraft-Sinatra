@@ -38,10 +38,8 @@ get "/" do
     liquid :index, :locals => { :user => user ? user.name : nil, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
-put "/draft", :auth => :user do
-    #draft = DraftManager.new(username, params[:title], params[:content])
-    #draft.create
-    $draft_m.create(user.id, params[:title], params[:content])
+post "/draft", :auth => :user do
+    $draft_m.create(user.id, params[:title], params[:deft])
     redirect '/'
 end
 
@@ -51,7 +49,7 @@ get "/draft", :auth => :user do
 end
 
 get "/draft/new", :auth => :user do
-    liquid :deftdraft, :layout => false, :locals => { :title => "Write a new draft!" }
+    liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
 end
 
 get "/draft/:num", :auth => :user do
