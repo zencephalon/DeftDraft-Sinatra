@@ -8,8 +8,19 @@
 
 <script src="/js/dd/mousetrap.min.js"></script>
 <!-- include jQuery library -->
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="/js/dd/jquery.autosize.js"></script>
 <link rel="stylesheet" href="/css/dd/dd-style.css">
+
+<script>
+    $(function(){
+        $('#deft').autosize({callback:
+            function() {
+                $('html, body').animate({ scrollTop: $(document).height()-$(window).height()}, 400, "swing");
+            }
+        });
+    });
+</script>
 
 </head>
 <body>

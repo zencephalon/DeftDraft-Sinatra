@@ -9,6 +9,7 @@ body {
     width: 30em;
     height: 30em;
     position: relative;
+    margin-bottom: 6em;
 }
 #title {
     background-color: #eeeedd;
