@@ -6,8 +6,8 @@
 
 <title>DeftDraft</title>
 
-<script src="mousetrap.min.js"></script>
-<link rel="stylesheet" href="dd-style.css">
+<script src="/js/dd/mousetrap.min.js"></script>
+<link rel="stylesheet" href="/css/dd-style.css">
 
 </head>
 <body>
@@ -15,6 +15,7 @@
         <h2>DD - <span id="buffers">Draft: <b>1</b>/1 - Commit: 0</span></h2>
         <textarea class="textarea mousetrap" id="deft"></textarea>
         <div id="sidebar">
+            <input type="submit" value="Submit draft!" />
             <p>Welcome. <em>DD</em> has two unique concepts you need to know about: drafts and commits.</p>
             <p>Type some text. Then <em>hit ctrl-space</em>. You used the <b>scratch</b> command which: saves the current draft, starts a new draft at the last commit.</p>
             <p>Type more text, then <b>scratch</b> again. Now <em>hit ctrl-h</em>. You are back to your second draft. Type some more text here, then <em>hit ctrl-h</em>. You are back to your first draft. <b>Cycle</b> in the other direction: <em>hit ctrl-l</em>.</p>
@@ -30,6 +31,6 @@
         </div>
     </div>
 </body>
-<script src="caret.js"></script>
-<script src="deftdraft.js"></script>
+<script src="/js/dd/caret.js"></script>
+<script src="/js/dd/deftdraft.js"></script>
 </html>

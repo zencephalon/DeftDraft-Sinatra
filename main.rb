@@ -51,7 +51,7 @@ get "/draft", :auth => :user do
 end
 
 get "/draft/new", :auth => :user do
-    liquid :draft, :locals => { :title => "Write a new draft!" }
+    liquid :deftdraft, :layout => false, :locals => { :title => "Write a new draft!" }
 end
 
 get "/draft/:num", :auth => :user do
