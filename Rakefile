@@ -11,6 +11,6 @@ end
 
 task :setup do |t|
     db = mongo_client.db('prosedy')
-    db.collection('prosedy').insert({name: 'data', users: 0})
+    db.collection('prosedy').insert({name: 'data', users: 0, drafts: 0})
     `mkdir ./data`
 end
