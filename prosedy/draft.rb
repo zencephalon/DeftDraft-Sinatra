@@ -30,9 +30,9 @@ class DraftManager
     end
 
     def get(uid, num)
-        draft = @draft_db.find_one({:uid => user, :num => num})
+        draft = @draft_db.find_one({:uid => uid, :num => num})
         return nil if draft.nil? 
-        draft['content'] = File.open("#{draft['dir']}/#{DRAFT_FILE_NAME}").read
+        draft['content'] = File.open("#{@prosedy.data_dir}/#{draft['uid']}/#{draft['num']}/#{DRAFT_FILE_NAME}").read
         return Draft.new(draft['_id'], draft['uid'], draft['title'], draft['content'])
     end
 
