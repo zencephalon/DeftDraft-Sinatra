@@ -37,7 +37,7 @@ set(:auth) do |roles|
 end
 
 get "/" do
-    liquid :index, :locals => { :user => user.name, :logged_in => logged_in?, :title => "Welcome!" }
+    liquid :index, :locals => { :user => user ? user.name : nil, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
 put "/draft", :auth => :user do
@@ -73,9 +73,7 @@ post "/signup" do
     end
 
     # save into mongodb
-    $user_m.create(username, params[:password])
-
-    session[:username] = username
+    session[:user] = $user_m.create(username, params[:password])
 
     redirect "/"
 end

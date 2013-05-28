@@ -24,7 +24,7 @@ class UserManager
 
     def login(name, password)
         user = find_by_name(name)
-        return (user && user.pw_hash == BCrypt::Engine.hash_secret(password, user.pw_salt))
+        (user && user.pw_hash == BCrypt::Engine.hash_secret(password, user.pw_salt)) ? user : nil
     end
 
     def increment_draft_count(id)
