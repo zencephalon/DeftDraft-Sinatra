@@ -2,8 +2,11 @@ body {
   padding-top: 1em;
   padding-bottom: 2em;
   font-family: 'Crimson Text', serif;
-  background-color: rgb(245, 255, 253);
+  background-color: #fffff0;
   font-size: 1.2em;
+  background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/square_bg.png);
+  background-size: auto;
+  background-repeat: repeat repeat;
 }
       
 h1 {

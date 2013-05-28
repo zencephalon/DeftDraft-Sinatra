@@ -1,11 +1,11 @@
 body {
-    background-color: #ffffee;
+    background-color: #fffff0;
 }
 #deft {
     float: left;
     font-size: 1.4em;
     margin-right: 30px;
-    background-color: #eeeedd;
+    background-color: #ffffee;
     width: 30em;
     height: 30em;
     position: relative;
