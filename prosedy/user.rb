@@ -31,10 +31,28 @@ class UserManager
         @user_db.find_and_modify(query: {_id: id}, update: {'$inc' => {drafts: 1}}, new: true)['drafts']
     end
 
-    def find_by_name(name)
+    def get_by_name(name)
         if result = @user_db.find_one({name: name})
-            return User.new(result['id'], result['name'], result['pw_hash'], result['pw_salt']);
+            return User.new(result['_id'], result['name'], result['pw_hash'], result['pw_salt']);
         else 
+            return nil
+        end
+    end
+
+    def get_by_id(id)
+        if result = @user_db.find_one({_id: id})
+            return User.new(result['_id'], result['name'], result['pw_hash'], result['pw_salt']);
+        else 
+            return nil
+        end
+    end
+
+    def get_by_id_or_name(name_or_id)
+        if result = get_by_id(name_or_id.to_i)
+            return result
+        elsif result = get_by_name(name_or_id)
+            return result
+        else
             return nil
         end
     end
