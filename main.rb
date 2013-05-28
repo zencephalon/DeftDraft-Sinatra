@@ -4,8 +4,6 @@ require 'bundler/setup'
 require 'sinatra'
 require 'mongo'
 
-require_relative './prosedy/draft'
-require_relative './prosedy/user'
 require_relative './prosedy/prosedy'
 
 enable :sessions
