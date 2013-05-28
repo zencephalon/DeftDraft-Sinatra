@@ -43,7 +43,7 @@ end
 put "/draft", :auth => :user do
     #draft = DraftManager.new(username, params[:title], params[:content])
     #draft.create
-    $draft_m.create(user_id, title, content)
+    $draft_m.create(user.id, params[:title], params[:content])
     redirect '/'
 end
 

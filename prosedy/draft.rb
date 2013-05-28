@@ -12,14 +12,13 @@ class DraftManager
        # if draft_db.find_one({uid: uid, title: title})
        #     raise 'Draft already exists'
        # end
-        
-        dir = "#{@prosedy.data_dir}/#{uid}/#{draft_id}"
+        num = @prosedy.user_m.increment_draft_count(uid)
+        did = @prosedy.increment_draft_count
 
+        dir = "#{@prosedy.data_dir}/#{uid}/#{num}"
         `mkdir #{dir}`
         `git init #{dir}`
 
-        num = @prosedy.user_m.increment_draft_count(uid)
-        did = @prosedy.increment_draft_count
         @draft_db.insert({uid: uid, title: title, num: num, _id: did})
 
         File.open("#{dir}/#{DRAFT_FILE_NAME}", 'w') do |f|
