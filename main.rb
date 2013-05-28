@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'sinatra'
+require 'mongo'
 
 require_relative './prosedy/draft'
 require_relative './prosedy/user'
@@ -9,26 +10,25 @@ require_relative './prosedy/prosedy'
 
 enable :sessions
 
-$prosedy = Prosedy.new
-$user_m = UserManager.new($prosedy)
-
-DATA_DIR = "./data"
+$prosedy = Prosedy.new(Mongo::MongoClient.new('localhost', 27017))
+$user_m = $prosedy.user_m
+$draft_m = $prosedy.draft_m
 
 helpers do
     def logged_in?
-        if session[:username].nil?
+        if session[:user].nil?
             return false
         else
             return true
         end
     end
 
-    def username
-        return session[:username]
+    def user
+        return session[:user]
     end
 end
 
-set(:auth) do |roles| # <- notice the splat here
+set(:auth) do |roles|
   condition do
     unless logged_in?
       redirect "/", 303
@@ -37,17 +37,18 @@ set(:auth) do |roles| # <- notice the splat here
 end
 
 get "/" do
-    liquid :index, :locals => { :user => username, :logged_in => logged_in?, :title => "Welcome!" }
+    liquid :index, :locals => { :user => user.name, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
 put "/draft", :auth => :user do
-    draft = DraftManager.new(username, params[:title], params[:content])
-    draft.create
+    #draft = DraftManager.new(username, params[:title], params[:content])
+    #draft.create
+    $draft_m.create(user_id, title, content)
     redirect '/'
 end
 
 get "/draft", :auth => :user do
-    drafts = DraftManager.get_drafts(username)
+    drafts = $draft_m.get_by_uid(user.id)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
 
@@ -56,8 +57,8 @@ get "/draft/new", :auth => :user do
 end
 
 get "/draft/:num", :auth => :user do
-    draft = DraftManager.get_draft(username, params[:num].to_i)
-    liquid :draft_display, :locals => { :title => draft.draft, :text => draft.content }
+    draft = $draft_m.get(user.id, params[:num].to_i)
+    liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
 end
 
 get "/signup" do
@@ -84,8 +85,8 @@ get "/login" do
 end
 
 post "/login" do
-    if $user_m.login(params[:username], params[:password])
-        session[:username] = params[:username]
+    if user = $user_m.login(params[:username], params[:password])
+        session[:user] = user
         redirect "/"
     else
         liquid :login_error
@@ -93,6 +94,6 @@ post "/login" do
 end
 
 get "/logout" do
-    session[:username] = nil
+    session[:user] = nil
     redirect "/"
 end

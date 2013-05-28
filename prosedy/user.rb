@@ -10,19 +10,25 @@ class UserManager
     end
 
     def create(name, password)
-        user_id = @prosedy.increment_user_count
+        uid = @prosedy.increment_user_count
 
         password_salt = BCrypt::Engine.generate_salt
         password_hash = BCrypt::Engine.hash_secret(password, password_salt)
 
-        @user_db.insert({name: name, _id: user_id, pw_hash: password_hash, pw_salt: password_salt})
+        @user_db.insert({name: name, _id: uid, pw_hash: password_hash, pw_salt: password_salt, drafts: 0})
 
-        `mkdir #{@prosedy.data_dir}/#{user_id}`
+        `mkdir #{@prosedy.data_dir}/#{uid}`
+
+        return User.new(uid, name)
     end
 
     def login(name, password)
         user = find_by_name(name)
         return (user && user.pw_hash == BCrypt::Engine.hash_secret(password, user.pw_salt))
+    end
+
+    def increment_draft_count(id)
+        @user_db.find_and_modify(query: {_id: id}, update: {'$inc' => {drafts: 1}}, new: true)['drafts']
     end
 
     def find_by_name(name)
