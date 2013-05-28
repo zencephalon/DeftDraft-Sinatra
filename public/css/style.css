@@ -2,7 +2,7 @@ body {
   padding-top: 1em;
   padding-bottom: 2em;
   font-family: 'Crimson Text', serif;
-  background-color: #ffffee;
+  background-color: rgb(245, 255, 253);
   font-size: 1.2em;
 }
       
@@ -168,7 +168,7 @@ hr {
 	-webkit-transform: matrix(1, 0, 0, 1, 0, 0);
 	cursor: pointer;
 	margin-bottom:10px;
-  padding: 5px;
+        padding: 5px;
 	height:75px;
 }
 
@@ -194,7 +194,7 @@ hr {
 /* Custom container */
 .container {
   margin: 0 auto;
-  max-width: 1024px;
+  max-width: 37em;
 }
 .container > hr {
   margin: 30px 0;
