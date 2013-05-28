@@ -64,6 +64,12 @@ get "/d/:num/view", :auth => :user do
     liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
 end
 
+get "/w/:num_or_name/d/:d_id" do
+    u = $user_m.get_by_id_or_name(params[:num_or_name])
+    draft = $draft_m.get(u.id, params[:d_id].to_i)
+    liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+end
+
 # ====================== Users ================================================
 
 get "/w/:num_or_name" do
