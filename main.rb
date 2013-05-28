@@ -41,28 +41,30 @@ end
 
 # ====================== Drafts ===============================================
 
-post "/draft", :auth => :user do
-    $draft_m.create(user.id, params[:title], params[:deft])
-    redirect '/'
-end
+["/draft", "/d"].each do |path|
+    post "#{path}", :auth => :user do
+        $draft_m.create(user.id, params[:title], params[:deft])
+        redirect '/'
+    end
 
-get "/draft", :auth => :user do
-    drafts = $draft_m.get_by_uid(user.id)
-    liquid :draft_list, :locals => { :drafts => drafts }
-end
+    get "#{path}", :auth => :user do
+        drafts = $draft_m.get_by_uid(user.id)
+        liquid :draft_list, :locals => { :drafts => drafts }
+    end
 
-get "/draft/new", :auth => :user do
-    liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
-end
+    get "#{path}/new", :auth => :user do
+        liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
+    end
 
-get "/draft/:num", :auth => :user do
-    draft = $draft_m.get(user.id, params[:num].to_i)
-    liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
-end
+    get "#{path}/:num", :auth => :user do
+        draft = $draft_m.get(user.id, params[:num].to_i)
+        liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
+    end
 
-get "/draft/:num/view", :auth => :user do
-    draft = $draft_m.get(user.id, params[:num].to_i)
-    liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+    get "#{path}/:num/view", :auth => :user do
+        draft = $draft_m.get(user.id, params[:num].to_i)
+        liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+    end
 end
 
 get "/w/:num_or_name/d/:d_id" do
