@@ -1,8 +1,9 @@
 body {
-  padding-top: 20px;
-  padding-bottom: 60px;
+  padding-top: 1em;
+  padding-bottom: 2em;
   font-family: 'Crimson Text', serif;
-  font-size: 16px;
+  background-color: #ffffee;
+  font-size: 1.2em;
 }
       
 h1 {

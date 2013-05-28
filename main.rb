@@ -57,7 +57,8 @@ get "/draft/:num", :auth => :user do
     liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
 end
 
-get "/draft/:num/view", :auth -> :user do
+get "/draft/:num/view", :auth => :user do
+    draft = $draft_m.get(user.id, params[:num].to_i)
     liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
 end
 
