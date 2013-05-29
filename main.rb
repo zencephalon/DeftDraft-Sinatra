@@ -11,7 +11,7 @@ set :bind, '0.0.0.0'
 
 $prosedy = Prosedy.new(Mongo::MongoClient.new('localhost', 27017))
 $user_m = $prosedy.user_m
-$draft_m = $prosedy.draft_m
+$doc_m = $prosedy.doc_m
 
 helpers do
     def logged_in?
@@ -41,15 +41,15 @@ end
 
 # ====================== Drafts ===============================================
 
-["/draft", "/d"].each do |path|
+["/doc", "/d"].each do |path|
     post "#{path}", :auth => :user do
-        $draft_m.create(user.id, params[:title], params[:deft])
+        $doc_m.create(user.id, params[:title], params[:deft])
         redirect '/'
     end
 
     get "#{path}", :auth => :user do
-        drafts = $draft_m.get_by_uid(user.id)
-        liquid :draft_list, :locals => { :drafts => drafts }
+        docs = $doc_m.get_by_uid(user.id)
+        liquid :doc_list, :locals => { :docs => docs }
     end
 
     get "#{path}/new", :auth => :user do
@@ -57,30 +57,31 @@ end
     end
 
     get "#{path}/:num", :auth => :user do
-        draft = $draft_m.get(user.id, params[:num].to_i)
-        liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
+        doc = $doc_m.get(user.id, params[:num].to_i)
+        # load the drafts for this doc
+        #liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
     end
 
     get "#{path}/:num/view", :auth => :user do
-        draft = $draft_m.get(user.id, params[:num].to_i)
-        liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+        doc = $doc_m.get(user.id, params[:num].to_i)
+        # load the current draft for this doc
+        liquid :doc_display, :locals => { :title => draft.title, :text => draft.content }
     end
 end
 
 get "/w/:num_or_name/d/:d_id" do
     u = $user_m.get_by_id_or_name(params[:num_or_name])
-    draft = $draft_m.get(u.id, params[:d_id].to_i)
-    liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+    doc = $doc_m.get(u.id, params[:d_id].to_i)
+    # load the current draft for this doc
+    liquid :doc_display, :locals => { :title => draft.title, :text => draft.content }
 end
 
 # ====================== Users ================================================
 
 get "/w/:num_or_name" do
     u = $user_m.get_by_id_or_name(params[:num_or_name])
-    drafts = $draft_m.get_by_uid(u.id)
-    puts u.to_s
-    puts drafts
-    liquid :draft_list, :locals => { :drafts => drafts }
+    docs = $doc_m.get_by_uid(u.id)
+    liquid :doc_list, :locals => { :docs => docs }
 end
 
 get "/signup" do

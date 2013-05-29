@@ -1,5 +1,5 @@
-#                id    user id  numeric id  current draft  draft count  title
-Doc = Struct.new :_id, :uid,    :nid,       :cd,           :dc,         :t
+#                id    user id  numeric id  current draft  draft count
+Doc = Struct.new :_id, :uid,    :nid,       :cd,           :dc,         
 
 class DocManager
 
@@ -18,11 +18,11 @@ class DocManager
                 nid: nid, 
                 cd: 1,
                 dc: 1,
-                t: title
             }
         )
 
         # create the draft too
+        #t: title
     end
 
     def get(uid, nid)
