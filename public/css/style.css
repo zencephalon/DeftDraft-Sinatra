@@ -4,7 +4,7 @@ body {
   font-family: 'Crimson Text', serif;
   background-color: #fffff0;
   font-size: 1.2em;
-  background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/square_bg.png);
+  background-image: url(/img/square_bg.png);
   background-size: auto;
   background-repeat: repeat repeat;
 }
