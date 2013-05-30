@@ -1,5 +1,6 @@
-#                id    user id  numeric id  current draft  draft count
-Draft = Struct.new :_id, :uid,    :nid,       :cd,           :dc,         
+
+#                  id    user id  numeric id  current revision  revision count  title
+Draft = Struct.new :_id, :w,    :n,         :cr,              :rc,            :t
 
 class DraftManager
 
@@ -8,34 +9,39 @@ class DraftManager
         @draft_db = @prosedy.db.collection('drafts')
     end
 
-    def create(uid, title, content)
-        nid = @prosedy.user_m.inc_draft_c(uid)
-        did = @prosedy.inc_draft_c
+    def create(wid, title, content)
+        nid = @prosedy.writer_m.inc_draft_c(uid)
 
-        @draft_db.insert(
-            {   _id: did, 
-                uid: uid, 
-                nid: nid, 
-                cd: 1,
-                dc: 1,
-            }
-        )
+        draft_id = BSON::ObjectId.new
+        revision_id = BSON::ObjectId.new
 
-        # create the draft too
-        #t: title
+        draft = {   
+            _id: draft_id,
+            w: wid, 
+            n: nid, 
+            t: title,
+            cr: revision_id,
+            rc: 1,
+        }
+
+        @draft_db.insert(draft)
+
+        return h_to_st(draft)
     end
 
-    def get(uid, nid)
-        draft = @draft_db.find_one({:uid => uid, :nid => nid})
+    def get(w, n)
+        draft = @draft_db.find_one({:w => w, :n => n})
+        draft ? 
         return nil if draft.nil? 
-        ret = Draft.new
-        draft.each do |k,v|
-            ret[k] = v
-        end
-        return ret
     end
 
-    def getXuid(id)
-        @draft_db.find({:uid => id}).to_a
+    def h_to_st(h)
+        draft = Draft.new
+        h.each { |k, v| draft[k] = v }
+        return draft
+    end
+
+    def get_by_writer(w)
+        @draft_db.find({:w => w}).to_a.map {|h| h_to_st(h)}
     end
 end

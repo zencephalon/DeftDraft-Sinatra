@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bcrypt'
 
-Writer = Struct.new :_id, :dc
+Writer = Struct.new :_id, :n, :dc
 
 class WriterManager
     def initialize(prosedy)
@@ -16,12 +16,12 @@ class WriterManager
     end
 
     def create(name, password)
-        return nil if @writer_db.find_one({_id: name})
+        return nil if @writer_db.find_one({n: name})
 
         ps = BCrypt::Engine.generate_salt
         ph = BCrypt::Engine.hash_secret(password, ps)
 
-        writer = {_id: name, ph: ph, ps: ps, dc: 0}
+        writer = {n: name, ph: ph, ps: ps, dc: 0}
         @writer_db.insert(writer)
         
         return h_to_st(writer)
@@ -37,7 +37,7 @@ class WriterManager
     end
 
     def find_by_name(name)
-        writer = @writer_db.find_one({_id: name}, fields: ['_id', 'dc'])
+        writer = @writer_db.find_one({n: name}, fields: ['_id', 'dc'])
         return writer ? h_to_st(writer) : nil
     end
 end

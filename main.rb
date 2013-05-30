@@ -10,20 +10,20 @@ enable :sessions
 set :bind, '0.0.0.0'
 
 $prosedy = Prosedy.new(Mongo::MongoClient.new('localhost', 27017))
-$user_m = $prosedy.user_m
+$writer_m = $prosedy.writer_m
 $draft_m = $prosedy.draft_m
 
 helpers do
     def logged_in?
-        if session[:user].nil?
+        if session[:writer].nil?
             return false
         else
             return true
         end
     end
 
-    def user
-        return session[:user]
+    def writer
+        return session[:writer]
     end
 end
 
@@ -36,41 +36,41 @@ set(:auth) do |roles|
 end
 
 get "/" do
-    liquid :index, :locals => { :user => user ? user.name : nil, :logged_in => logged_in?, :title => "Welcome!" }
+    liquid :index, :locals => { :writer => writer ? writer.n : nil, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
 # ====================== Drafts ===============================================
 
 ["/draft", "/d"].each do |path|
-    post "#{path}", :auth => :user do
-        $draft_m.create(user.id, params[:title], params[:deft])
+    post "#{path}", :auth => :writer do
+        $draft_m.create(writer.id, params[:title], params[:deft])
         redirect '/'
     end
 
-    get "#{path}", :auth => :user do
-        drafts = $draft_m.get_by_uid(user.id)
+    get "#{path}", :auth => :writer do
+        drafts = $draft_m.get_by_uid(writer.id)
         liquid :draft_list, :locals => { :drafts => drafts }
     end
 
-    get "#{path}/new", :auth => :user do
+    get "#{path}/new", :auth => :writer do
         liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
     end
 
-    get "#{path}/:num", :auth => :user do
-        draft = $draft_m.get(user.id, params[:num].to_i)
+    get "#{path}/:num", :auth => :writer do
+        draft = $draft_m.get(writer.id, params[:num].to_i)
         # load the drafts for this draft
         #liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
     end
 
-    get "#{path}/:num/view", :auth => :user do
-        draft = $draft_m.get(user.id, params[:num].to_i)
+    get "#{path}/:num/view", :auth => :writer do
+        draft = $draft_m.get(writer.id, params[:num].to_i)
         # load the current draft for this draft
         liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
     end
 end
 
 get "/w/:num_or_name/d/:d_id" do
-    u = $user_m.get_by_id_or_name(params[:num_or_name])
+    u = $writer_m.get_by_id_or_name(params[:num_or_name])
     draft = $draft_m.get(u.id, params[:d_id].to_i)
     # load the current draft for this draft
     liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
@@ -79,7 +79,7 @@ end
 # ====================== Users ================================================
 
 get "/w/:num_or_name" do
-    u = $user_m.get_by_id_or_name(params[:num_or_name])
+    u = $writer_m.get_by_id_or_name(params[:num_or_name])
     drafts = $draft_m.get_by_uid(u.id)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
@@ -91,12 +91,12 @@ end
 post "/signup" do
     username = params[:username]
 
-    if $user_m.get_by_name(username)
+    if $writer_m.get_by_name(username)
         redirect "/login"
     end
 
     # save into mongodb
-    session[:user] = $user_m.create(username, params[:password])
+    session[:writer] = $writer_m.create(writername, params[:password])
 
     redirect "/"
 end
@@ -106,8 +106,8 @@ get "/login" do
 end
 
 post "/login" do
-    if user = $user_m.login(params[:username], params[:password])
-        session[:user] = user
+    if writer = $writer_m.login(params[:username], params[:password])
+        session[:writer] = writer
         redirect "/"
     else
         liquid :login_error
@@ -115,6 +115,6 @@ post "/login" do
 end
 
 get "/logout" do
-    session[:user] = nil
+    session[:writer] = nil
     redirect "/"
 end
