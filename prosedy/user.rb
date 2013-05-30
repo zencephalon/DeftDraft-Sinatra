@@ -1,7 +1,7 @@
 require "rubygems"
 require 'bcrypt'
 
-User = Struct.new :id, :name, :pw_hash, :pw_salt
+User = Struct.new :id, :name, :ph, :ps
 
 class UserManager
     def initialize(prosedy)
@@ -15,7 +15,7 @@ class UserManager
         password_salt = BCrypt::Engine.generate_salt
         password_hash = BCrypt::Engine.hash_secret(password, password_salt)
 
-        @user_db.insert({name: name, _id: uid, pw_hash: password_hash, pw_salt: password_salt, drafts: 0})
+        @user_db.insert({name: name, _id: uid, ph: password_hash, ps: password_salt, dc: 0})
 
         `mkdir #{@prosedy.data_dir}/#{uid}`
 
@@ -27,8 +27,8 @@ class UserManager
         (user && user.pw_hash == BCrypt::Engine.hash_secret(password, user.pw_salt)) ? user : nil
     end
 
-    def increment_draft_count(id)
-        @user_db.find_and_modify(query: {_id: id}, update: {'$inc' => {drafts: 1}}, new: true)['drafts']
+    def inc_draft_c(id)
+        @user_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, new: true)['dc']
     end
 
     def get_by_name(name)

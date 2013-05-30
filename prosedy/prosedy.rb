@@ -19,7 +19,7 @@ class Prosedy
         @db.collection('prosedy').find_and_modify(:query => {:name => "data"}, :update => {"$inc" => {"users" => 1}}, :new => true)['users']
     end
 
-    def increment_draft_count
+    def increment_doc_count
         @db.collection('prosedy').find_and_modify(:query => {:name => "data"}, :update => {"$inc" => {"drafts" => 1}}, :new => true)['drafts']
     end
 end

@@ -1,18 +1,18 @@
 #                id    user id  numeric id  current draft  draft count
-Doc = Struct.new :_id, :uid,    :nid,       :cd,           :dc,         
+Draft = Struct.new :_id, :uid,    :nid,       :cd,           :dc,         
 
-class DocManager
+class DraftManager
 
     def initialize(prosedy)
         @prosedy = prosedy
-        @doc_db = @prosedy.db.collection('documents')
+        @draft_db = @prosedy.db.collection('drafts')
     end
 
     def create(uid, title, content)
-        nid = @prosedy.user_m.inc_doc_c(uid)
-        did = @prosedy.inc_doc_c
+        nid = @prosedy.user_m.inc_draft_c(uid)
+        did = @prosedy.inc_draft_c
 
-        @doc_db.insert(
+        @draft_db.insert(
             {   _id: did, 
                 uid: uid, 
                 nid: nid, 
@@ -26,16 +26,16 @@ class DocManager
     end
 
     def get(uid, nid)
-        doc = @doc_db.find_one({:uid => uid, :nid => nid})
+        draft = @draft_db.find_one({:uid => uid, :nid => nid})
         return nil if draft.nil? 
-        ret = Doc.new
-        doc.each do |k,v|
+        ret = Draft.new
+        draft.each do |k,v|
             ret[k] = v
         end
         return ret
     end
 
     def getXuid(id)
-        @doc_db.find({:uid => id}).to_a
+        @draft_db.find({:uid => id}).to_a
     end
 end
