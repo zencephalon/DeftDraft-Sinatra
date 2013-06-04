@@ -31,7 +31,19 @@ function start_pb() {
 }
 
 function step_pb_f() {
-
+    diff = diffs[pb_pointer];
+    if (diff[0] == 1) {
+        pb_text = deft.value;
+        start = pb_text.slice(0, diff[1]);
+        end = pb_text.slice(diff[1]);
+        deft.value = start + diff[2] + end;
+    }
+    if (diff[0] == 0) {
+        pb_text = deft.value;
+        start = pb_text.slice(0, diff[1] - diff[2].length);
+        end = pb_text.slice(diff[1]);
+        deft.value = start + end;
+    }
     pb_pointer++;
 }
 
