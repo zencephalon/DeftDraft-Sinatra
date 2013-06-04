@@ -24,57 +24,39 @@ function getTime() {
     return (new Date).getTime();
 }
 
-function start_pb() {
-    playback_buffer = new Buffer('', 0);
-    playback_buffer.set();
-    pb_pointer = 0;
-}
-
-function step_pb_f() {
-    diff = diffs[pb_pointer];
-    if (diff[0] == 1) {
-        pb_text = deft.value;
-        start = pb_text.slice(0, diff[1]);
-        end = pb_text.slice(diff[1]);
-        deft.value = start + diff[2] + end;
-    }
-    if (diff[0] == 0) {
-        pb_text = deft.value;
-        start = pb_text.slice(0, diff[1] - diff[2].length);
-        end = pb_text.slice(diff[1]);
-        deft.value = start + end;
-    }
-    pb_pointer++;
-}
-
 function playback() {
     playback_buffer = new Buffer('', 0);
     playback_buffer.set();
+    pb_pointer = 0;
     if (diffs.length > 0) {
         r_playback();
     }
 }
 
 function r_playback() {
-    diff = diffs.shift();
-    b_diffs.push(diff);
+    if (pb_pointer >= diffs.length) {
+        return;
+    }
+
+    diff = diffs[pb_pointer];
+
     if (diff[0] == 1) {
         pb_text = deft.value;
         start = pb_text.slice(0, diff[1]);
         end = pb_text.slice(diff[1]);
         deft.value = start + diff[2] + end;
     }
+
     if (diff[0] == 0) {
         pb_text = deft.value;
         start = pb_text.slice(0, diff[1] - diff[2].length);
         end = pb_text.slice(diff[1]);
         deft.value = start + end;
     }
-    if (diffs.length > 0) {
-        window.setTimeout(r_playback, diffs[0][3]);
-    } else {
-        unwind();
-    }
+
+    pb_pointer++;
+
+    window.setTimeout(r_playback, diff[3]);
 }
 
 function unwind() {
