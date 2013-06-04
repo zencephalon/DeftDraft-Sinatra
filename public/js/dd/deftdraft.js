@@ -18,9 +18,23 @@ var b_diffs = [];
 
 var special_cmd = false;
 
+var pb_pointer = 0;
+
 function getTime() {
     return (new Date).getTime();
 }
+
+function start_pb() {
+    playback_buffer = new Buffer('', 0);
+    playback_buffer.set();
+    pb_pointer = 0;
+}
+
+function step_pb_f() {
+
+    pb_pointer++;
+}
+
 
 function playback() {
     playback_buffer = new Buffer('', 0);
