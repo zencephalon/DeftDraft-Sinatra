@@ -47,7 +47,6 @@ function step_pb_f() {
     pb_pointer++;
 }
 
-
 function playback() {
     playback_buffer = new Buffer('', 0);
     playback_buffer.set();
@@ -172,7 +171,7 @@ function do_cmd(f) {
     special_cmd = true;
     change_time = getTime(); 
     d_t = change_time - lc_time;
-    diffs.push([0, 0, deft.value, d_t]);
+    diffs.push([0, deft.value.length, deft.value, d_t]);
 
     f();
 
