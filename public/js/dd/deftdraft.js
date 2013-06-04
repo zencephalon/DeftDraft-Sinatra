@@ -14,6 +14,7 @@ var d_cr = 0;
 
 var lc_time = -1;
 var diffs = [];
+var b_diffs = [];
 
 var special_cmd = false;
 
@@ -31,6 +32,7 @@ function playback() {
 
 function r_playback() {
     diff = diffs.shift();
+    b_diffs.push(diff);
     if (diff[0] == "ins") {
         pb_text = deft.value;
         start = pb_text.slice(0, diff[1]);
@@ -39,15 +41,23 @@ function r_playback() {
     }
     if (diff[0] == "del") {
         pb_text = deft.value;
-        start = pb_text.slice(0, diff[1]);
-        end = pb_text.slice(diff[1] + diff[2]);
+        start = pb_text.slice(0, diff[1] - diff[2].length);
+        end = pb_text.slice(diff[1]);
         deft.value = start + end;
     }
     if (diffs.length > 0) {
         window.setTimeout(r_playback, diffs[0][3]);
+    } else {
+        unwind();
     }
 }
 
+function unwind() {
+    if (b_diffs.length > 0) {
+        diffs.push(b_diffs.shift());
+        unwind();
+    } 
+}
 
 track_changes = function() {
     if (lc_time < 0) { lc_time = getTime(); }
@@ -73,12 +83,12 @@ track_changes = function() {
                 diffs.push(diff);
             } else {
                 change_type = "simple delete";
-                diff = ["del", cursor_pos, -d_tx, d_t];
+                diff = ["del", cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
                 diffs.push(diff);
             }
         } else {
             change_type = "composite";
-            diff = ["del", cursor_pos, d_cr - d_tx, d_t];
+            diff = ["del", cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
             diffs.push(diff);
             if (d_cr > 0) {
                 diff = ["ins", cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
@@ -136,7 +146,7 @@ function do_cmd(f) {
     special_cmd = true;
     change_time = getTime(); 
     d_t = change_time - lc_time;
-    diffs.push(["del", 0, deft.value.length, d_t]);
+    diffs.push(["del", 0, deft.value, d_t]);
 
     f();
 
