@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bcrypt'
 
-Writer = Struct.new :_id, :n, :dc
+Writer = Struct.new :_id, :n, :dc, :ph, :ps
 
 class WriterManager
     def initialize(prosedy)

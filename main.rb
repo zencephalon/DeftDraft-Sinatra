@@ -91,12 +91,12 @@ end
 post "/signup" do
     username = params[:username]
 
-    if $writer_m.get_by_name(username)
+    if $writer_m.find_by_name(username)
         redirect "/login"
     end
 
     # save into mongodb
-    session[:writer] = $writer_m.create(writername, params[:password])
+    session[:writer] = $writer_m.create(username, params[:password])
 
     redirect "/"
 end
