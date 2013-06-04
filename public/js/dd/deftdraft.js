@@ -33,13 +33,13 @@ function playback() {
 function r_playback() {
     diff = diffs.shift();
     b_diffs.push(diff);
-    if (diff[0] == "ins") {
+    if (diff[0] == 1) {
         pb_text = deft.value;
         start = pb_text.slice(0, diff[1]);
         end = pb_text.slice(diff[1]);
         deft.value = start + diff[2] + end;
     }
-    if (diff[0] == "del") {
+    if (diff[0] == 0) {
         pb_text = deft.value;
         start = pb_text.slice(0, diff[1] - diff[2].length);
         end = pb_text.slice(diff[1]);
@@ -79,19 +79,19 @@ track_changes = function() {
         if (d_tx == d_cr) {
             if (now_text.length > text.length) {
                 change_type = "simple insert";
-                diff = ["ins", cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
+                diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
                 diffs.push(diff);
             } else {
                 change_type = "simple delete";
-                diff = ["del", cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
+                diff = [0, cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
                 diffs.push(diff);
             }
         } else {
             change_type = "composite";
-            diff = ["del", cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
+            diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
             diffs.push(diff);
             if (d_cr > 0) {
-                diff = ["ins", cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
+                diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
                 diffs.push(diff);
             }
         }
@@ -146,11 +146,11 @@ function do_cmd(f) {
     special_cmd = true;
     change_time = getTime(); 
     d_t = change_time - lc_time;
-    diffs.push(["del", 0, deft.value, d_t]);
+    diffs.push([0, 0, deft.value, d_t]);
 
     f();
 
-    diffs.push(["ins", 0, deft.value, d_t]);
+    diffs.push([1, 0, deft.value, d_t]);
     lc_time = change_time;
 }
 
