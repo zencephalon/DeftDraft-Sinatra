@@ -1,17 +1,18 @@
 require 'rubygems'
 require 'pathname'
 require 'mongo'
-require_relative "user"
+require_relative "writer"
 require_relative "draft"
+require_relative "revision"
 
 class Prosedy
-    attr_reader :db, :data_dir, :user_m, :draft_m
+    attr_reader :db, :data_dir, :writer_m, :draft_m
 
     def initialize(client)
         @client = client
         @db = @client.db('prosedy')
         @data_dir = Pathname.new('../data').expand_path.to_s
-        @user_m = UserManager.new(self)
+        @writer_m = WriterManager.new(self)
         @draft_m = DraftManager.new(self)
     end
 
