@@ -20,9 +20,10 @@ var special_cmd = false;
 
 var pb_pointer = 0;
 
-var playback_timeout_ref;
+var pb_timeout_ref;
 var playback = false;
 var pb_paused = false;
+var pb_dir = 1;
 
 function getTime() {
     return (new Date).getTime();
@@ -35,18 +36,23 @@ function start_pb() {
     playback_buffer = new Buffer('', 0);
     playback_buffer.set();
     pb_pointer = 0;
-    if (diffs.length > 0) {
-        r_playback();
-    }
+
+    r_playback();
 }
 
 function pause_pb() {
     pb_paused = true;
-    window.clearTimeout(playback_timeout_ref);
+    window.clearTimeout(pb_timeout_ref);
+}                     
+
+function resume_pb() {
+    pb_paused = false;
+
+    r_playback();
 }
 
 function step_pb() {
-    if (pb_pointer >= diffs.length) {
+    if (pb_pointer >= diffs.length || pb_pointer < 0) {
         return;
     }
 
@@ -66,21 +72,14 @@ function step_pb() {
         deft.value = start + end;
     }
 
-    pb_pointer++;
+    pb_pointer += pb_dir;
     status();
 }
 
 function r_playback() {
     step_pb();
 
-    playback_timeout_ref = window.setTimeout(r_playback, diff[3]);
-}
-
-function unwind() {
-    if (b_diffs.length > 0) {
-        diffs.push(b_diffs.shift());
-        unwind();
-    } 
+    pb_timeout_ref = window.setTimeout(r_playback, diff[3]);
 }
 
 track_changes = function() {
