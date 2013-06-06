@@ -20,11 +20,18 @@ var special_cmd = false;
 
 var pb_pointer = 0;
 
+var playback_timeout_ref;
+var playback = false;
+var pb_paused = false;
+
 function getTime() {
     return (new Date).getTime();
 }
 
-function playback() {
+function start_pb() {
+    playback = true;
+    pb_paused = false;
+    
     playback_buffer = new Buffer('', 0);
     playback_buffer.set();
     pb_pointer = 0;
@@ -33,7 +40,12 @@ function playback() {
     }
 }
 
-function r_playback() {
+function pause_pb() {
+    pb_paused = true;
+    window.clearTimeout(playback_timeout_ref);
+}
+
+function step_pb() {
     if (pb_pointer >= diffs.length) {
         return;
     }
@@ -55,8 +67,13 @@ function r_playback() {
     }
 
     pb_pointer++;
+    status();
+}
 
-    window.setTimeout(r_playback, diff[3]);
+function r_playback() {
+    step_pb();
+
+    playback_timeout_ref = window.setTimeout(r_playback, diff[3]);
 }
 
 function unwind() {
@@ -67,48 +84,50 @@ function unwind() {
 }
 
 track_changes = function() {
-    if (lc_time < 0) { lc_time = getTime(); }
+    if (! playback) {
+        if (lc_time < 0) { lc_time = getTime(); }
 
-    now_text = deft.value;
-    now_cursor_pos = getCaret(deft);
+        now_text = deft.value;
+        now_cursor_pos = getCaret(deft);
 
-    d_tx = now_text.length - text.length;
-    d_cr = now_cursor_pos - cursor_pos;
+        d_tx = now_text.length - text.length;
+        d_cr = now_cursor_pos - cursor_pos;
 
-    if (now_text == text || special_cmd) {
-        change_type = "no change";
-        special_cmd = false;
-    } else {
-        change_time = getTime(); 
-        d_t = change_time - lc_time;
-        changes++;
-
-        if (d_tx == d_cr) {
-            if (now_text.length > text.length) {
-                change_type = "simple insert";
-                diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
-                diffs.push(diff);
-            } else {
-                change_type = "simple delete";
-                diff = [0, cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
-                diffs.push(diff);
-            }
+        if (now_text == text || special_cmd) {
+            change_type = "no change";
+            special_cmd = false;
         } else {
-            change_type = "composite";
-            diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
-            diffs.push(diff);
-            if (d_cr > 0) {
-                diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
+            change_time = getTime(); 
+            d_t = change_time - lc_time;
+            changes++;
+
+            if (d_tx == d_cr) {
+                if (now_text.length > text.length) {
+                    change_type = "simple insert";
+                    diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
+                    diffs.push(diff);
+                } else {
+                    change_type = "simple delete";
+                    diff = [0, cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
+                    diffs.push(diff);
+                }
+            } else {
+                change_type = "composite";
+                diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
                 diffs.push(diff);
+                if (d_cr > 0) {
+                    diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
+                    diffs.push(diff);
+                }
             }
+
+            text = now_text;
+            lc_time = change_time;
         }
 
-        text = now_text;
-        lc_time = change_time;
+        cursor_pos = getCaret(deft);
+        status();
     }
-
-    cursor_pos = getCaret(deft);
-    status();
 };
 
 
@@ -184,7 +203,11 @@ function left() {
 }
 
 function status() {
-    status1();
+    if (playback) {
+        playback_status();
+    } else {
+        status1();
+    }
 }
 
 function status1() {
@@ -195,6 +218,11 @@ function status1() {
 
 function status2() {
     html = "cursorpos: " + cursor_pos + " change: " + change_type + " d_tx: " + d_tx + " d_cr: " + d_cr;
+    document.getElementById("buffers").innerHTML = html;
+}
+
+function playback_status() {
+    html = "playback: " + pb_pointer + "/" + diffs.length + (pb_paused ? " paused" : "")
     document.getElementById("buffers").innerHTML = html;
 }
 
