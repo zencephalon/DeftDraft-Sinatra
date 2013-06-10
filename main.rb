@@ -63,7 +63,7 @@ end
         liquid :deftdraft, :layout => false, :locals => { title: "", text: "" }
     end
 
-    get "#{path}/:num", :auth => :writer do
+    get "#{path}/:num/edit", :auth => :writer do
         draft = $draft_m.get(writer._id, params[:num])
         branch = $branch_m.get(draft)
         # load the drafts for this draft
