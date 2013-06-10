@@ -53,7 +53,7 @@ function resume_pb() {
 
 function step_pb() {
     if (pb_pointer >= diffs.length || pb_pointer < 0) {
-        return;
+        return false;
     }
 
     diff = diffs[pb_pointer];
@@ -74,12 +74,13 @@ function step_pb() {
 
     pb_pointer += pb_dir;
     status();
+    return true;
 }
 
 function r_playback() {
-    step_pb();
-
-    pb_timeout_ref = window.setTimeout(r_playback, diff[3]);
+    if (step_pb()) {
+        pb_timeout_ref = window.setTimeout(r_playback, diffs[pb_pointer - 1][3]);
+    }
 }
 
 track_changes = function() {
@@ -115,7 +116,7 @@ track_changes = function() {
                 diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
                 diffs.push(diff);
                 if (d_cr > 0) {
-                    diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 10];
+                    diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 5];
                     diffs.push(diff);
                 }
             }
@@ -125,6 +126,7 @@ track_changes = function() {
         }
 
         cursor_pos = getCaret(deft);
+        document.getElementById("diffs").value = diffs;
         status();
     }
 };
@@ -175,7 +177,7 @@ function do_cmd(f) {
 
     f();
 
-    diffs.push([1, 0, deft.value, d_t]);
+    diffs.push([1, 0, deft.value, 10]);
     lc_time = change_time;
 }
 
