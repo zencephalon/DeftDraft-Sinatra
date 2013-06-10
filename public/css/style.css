@@ -2,7 +2,7 @@ body {
   padding-top: 1em;
   padding-bottom: 2em;
   font-family: 'Crimson Text', serif;
-  background-color: #fffff0;
+  background-color: #EBF7F8;
   font-size: 1.2em;
   background-image: url(/img/square_bg.png);
   background-size: auto;
@@ -131,67 +131,6 @@ hr {
 	font-size: 18px;
 	font-weight: 400;
   margin: 3px 0 3px 0;
-}
-
-.home-icon {
-	width:150px;
-	/*
-	border: 1px solid black;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	border-radius: 25px;
-	*/
-}
-
-.home-list-icon {
-	width:100px;
-	border: 1px solid black;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	border-radius: 25px;
-	float:left;
-	margin-right: 5px;
-}
-
-
-.story-icon {
-	width:150px;
-	max-width:96%;
-	/*
-	border: 1px solid black;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	border-radius: 25px;
-	*/
-}
-
-.story-box-list {
-	z-index: auto;
-	box-shadow: rgb(153, 153, 153) 0px 0px 0px 0px;
-	-webkit-transform: matrix(1, 0, 0, 1, 0, 0);
-	cursor: pointer;
-	margin-bottom:10px;
-        padding: 5px;
-	height:75px;
-}
-
-
-.story-box {
-	z-index: auto;
-	box-shadow: rgb(153, 153, 153) 0px 0px 0px 0px;
-	-webkit-transform: matrix(1, 0, 0, 1, 0, 0);
-	-moz-transform: matrix(1, 0, 0, 1, 0, 0);
-	cursor: pointer;
-	margin-bottom:10px;
-  padding: 5px;
-	min-height:350px;
-}
-
-.story-box-up {
-	z-index: 10; 
-	box-shadow: rgb(51, 51, 51) 0px 0px 40px -2px;
-	-webkit-transform: matrix(1.05, 0, 0, 1.05, 0, 0);
-	-moz-transform: matrix(1.05, 0, 0, 1.05, 0, 0);
 }
 
 /* Custom container */
