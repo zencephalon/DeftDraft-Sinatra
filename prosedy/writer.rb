@@ -23,21 +23,30 @@ class WriterManager
 
         writer = {n: name, ph: ph, ps: ps, dc: 0}
         @writer_db.insert(writer)
-        
-        return h_to_st(writer)
+
+        return sanitize(h_to_st(writer))
+    end
+
+    def sanitize(writer)
+        writer.ph = nil
+        writer.ps = nil
+        writer
     end
 
     def login(name, password)
         writer = find_by_name(name)
-        (writer && writer.ph == BCrypt::Engine.hash_secret(password, writer.ps)) ? h_to_st(writer) : nil
+        (writer && writer.ph == BCrypt::Engine.hash_secret(password, writer.ps)) ? sanitize(writer) : nil
     end
 
     def inc_draft_c(id)
-        @writer_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, fields: {dc: true}, new: true)['dc']
+        #File.open("log","w+") do |f|
+           @writer_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, fields: {dc: true}, new: true)['dc']
+        #end
+        #return 1;
     end
 
     def find_by_name(name)
-        writer = @writer_db.find_one({n: name}, fields: ['_id', 'dc'])
+        writer = @writer_db.find_one({n: name})
         return writer ? h_to_st(writer) : nil
     end
 end
