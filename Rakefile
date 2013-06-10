@@ -19,8 +19,8 @@ task :setup do |t|
 end
 
 task :start do |t|
+    `chromium --incognito 0.0.0.0:4567`
     `ruby main.rb`
-    `chromium --incognito 0.0.0.0`
 end
 
 task :go => [:clean, :setup, :start] do |t|
