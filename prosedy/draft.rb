@@ -8,7 +8,7 @@ class DraftManager
         @draft_db = @prosedy.db.collection('drafts')
     end
 
-    def create(w, title, content)
+    def create(w, title, content, diffs)
         nid = @prosedy.writer_m.inc_draft_c(w._id)
 
         draft_id = BSON::ObjectId.new
