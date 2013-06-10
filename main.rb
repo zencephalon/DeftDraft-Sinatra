@@ -75,7 +75,7 @@ end
         draft = $draft_m.get(writer._id, params[:num])
         branch = $branch_m.get(draft)
         # load the current draft for this draft
-        liquid :draft_display, :locals => { :title => draft.t, :text => RedCloth.new(branch.et).to_html }
+        liquid :draft_display, :layout => false, :locals => { :title => draft.t, :text => RedCloth.new(branch.et).to_html, :starting_text => branch.st, :diffs => branch.df }
     end
 end
 
