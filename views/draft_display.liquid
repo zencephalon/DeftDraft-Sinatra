@@ -26,12 +26,17 @@
 <body>
     <div id="content">
         <input type="hidden" id="diffs" name="diffs" value="{{diffs}}"/>
-        <h2>{{title}}<span style="float: right; font-size:50%;"><a href="#" onclick="switch_playback()">view playback</a></span></h2>
+        <h2>{{title}}
+            <div id="buffers" style="display:none; font-size:50%; margin-left:2em;"></div>
+            <span style="float: right; font-size:50%;">
+                <a href="#" id="playback_button" onclick="switch_playback()">view playback</a>
+            </span>
+        </h2>
         <div id="text">
             {{text}}
         </div>
-        <div id="deft" style="display:none;">
-        </div>
+        
+        <div id="deft" style="display:none;">{{starting_text}}</div>
     </div>
 </body>
 <script src="/js/dd/caret.js"></script>

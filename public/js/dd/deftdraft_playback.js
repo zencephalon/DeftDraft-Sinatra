@@ -14,9 +14,28 @@ var just_loaded = true;
 
 var deft = document.getElementById('deft');
 
-function switch_playback() {
-    decode_diffs();
+var playback_view_toggled = false;
 
+function switch_playback() {
+    if (playback_view_toggled) {
+        $('#playback_button').html("view playback");
+        $('#deft').css("display","none");
+        $('#buffers').css("display","none");
+        $('#text').css("display","inline");
+    }
+    else {
+        if (just_loaded) {
+            just_loaded = false;
+            decode_diffs();
+        }
+
+        $('#playback_button').html("view finished text");
+        $('#deft').css("display","inline");
+        $('#buffers').css("display","inline");
+        $('#text').css("display","none");
+        start_pb();
+    }
+    playback_view_toggled = !playback_view_toggled;
 }
 
 function start_pb() {
@@ -93,7 +112,6 @@ function Buffer(text, cursor) {
 
 Buffer.prototype.set = function() {
     deft.innerHTML = this.text;
-    setCaret(deft, this.cursor);
 }
 
 Buffer.prototype.toString = function() {
