@@ -25,6 +25,8 @@ var playback = false;
 var pb_paused = false;
 var pb_dir = 1;
 
+var just_loaded = true;
+
 function getTime() {
     return (new Date).getTime();
 }
@@ -84,6 +86,10 @@ function r_playback() {
 }
 
 track_changes = function() {
+    if (just_loaded) {
+        just_loaded = false;
+        //diffs = decodeDiffs();
+    }
     if (! playback) {
         if (lc_time < 0) { lc_time = getTime(); }
 
@@ -105,19 +111,19 @@ track_changes = function() {
                 if (now_text.length > text.length) {
                     change_type = "simple insert";
                     diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
-                    diffs.push(diff);
+                    add_diff(diff);
                 } else {
                     change_type = "simple delete";
                     diff = [0, cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
-                    diffs.push(diff);
+                    add_diff(diff);
                 }
             } else {
                 change_type = "composite";
                 diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
-                diffs.push(diff);
+                add_diff(diff);
                 if (d_cr > 0) {
                     diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), 5];
-                    diffs.push(diff);
+                    add_diff(diff);
                 }
             }
 
@@ -126,7 +132,8 @@ track_changes = function() {
         }
 
         cursor_pos = getCaret(deft);
-        document.getElementById("diffs").value = diffs;
+        //$('#diffs').data(diffs);
+        //document.getElementById("diffs").value = diffs;
         status();
     }
 };
@@ -167,17 +174,23 @@ function save() {
     buffers[current] = buffer;
 }
 
+function add_diff(diff) {
+    diffs.push(diff);
+    diff_str = diff[0] + ',' + diff[1] + ',' + "'" + encodeURIComponent(diff[2]) + "'" + ',' + diff[3] + ';';
+    document.getElementById('diffs').value += diff_str;
+}
+
 function do_cmd(f) {
     save();
 
     special_cmd = true;
     change_time = getTime(); 
     d_t = change_time - lc_time;
-    diffs.push([0, deft.value.length, deft.value, d_t]);
+    add_diff([0, deft.value.length, deft.value, d_t]);
 
     f();
 
-    diffs.push([1, 0, deft.value, 10]);
+    add_diff([1, 0, deft.value, 10]);
     lc_time = change_time;
 }
 

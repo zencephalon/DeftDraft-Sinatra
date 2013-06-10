@@ -1,8 +1,7 @@
 # id, writer, numeric id, title
-Draft = Struct.new :_id, :w, :n, :t
+Draft = Struct.new :_id, :w, :n, :t, :b
 
 class DraftManager
-
     def initialize(prosedy)
         @prosedy = prosedy
         @draft_db = @prosedy.db.collection('drafts')
@@ -15,10 +14,22 @@ class DraftManager
         branch_id = BSON::ObjectId.new
         #revision_id = BSON::ObjectId.new
 
+        branch = {
+            _id: branch_id,
+            st: "",
+            et: content,
+            df: diffs,
+            d: draft_id
+        }
+
+        @prosedy.branch_m.create(branch)
+
         draft = {   
+            _id: draft_id,
             w: w._id, 
             n: nid, 
             t: title,
+            b: branch_id
         }
 
         @draft_db.insert(draft)

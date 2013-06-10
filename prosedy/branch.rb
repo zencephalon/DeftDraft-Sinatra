@@ -2,5 +2,20 @@
 Branch = Struct.new :_id, :d, :st, :et, :df
 
 class BranchManager
+    def initialize(prosedy)
+        @prosedy = prosedy
+        @branch_db = @prosedy.db.collection('branches')
+    end
 
+    def create(branch)
+        @branch_db.insert(branch)
+
+        return h_to_st(branch)
+    end
+        
+    def h_to_st(h)
+        branch = Branch.new
+        h.each { |k, v| branch[k] = v }
+        return branch
+    end
 end
