@@ -14,3 +14,7 @@ task :setup do |t|
     db.collection('prosedy').insert({name: 'data', users: 0, drafts: 0})
     `mkdir ./data`
 end
+
+task :start do |t|
+    `ruby main.rb`
+end
