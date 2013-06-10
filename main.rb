@@ -35,8 +35,10 @@ set(:auth) do |roles|
   end
 end
 
+# =============================================================================
+
 get "/" do
-    liquid :index, :locals => { :writer => writer ? writer._id : nil, :logged_in => logged_in?, :title => "Welcome!" }
+    liquid :index, :locals => { :writer => writer ? writer.n : nil, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
 # ====================== Drafts ===============================================
@@ -79,8 +81,8 @@ end
 # ====================== Users ================================================
 
 get "/w/:num_or_name" do
-    w = $writer_m.get_by_id_or_name(params[:num_or_name])
-    drafts = $draft_m.get_by_uid(w._id)
+    w = $writer_m.find_by_name(params[:num_or_name])
+    drafts = $draft_m.get_by_writer(w._id)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
 
