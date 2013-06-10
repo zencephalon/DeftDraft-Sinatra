@@ -88,7 +88,7 @@ function r_playback() {
 track_changes = function() {
     if (just_loaded) {
         just_loaded = false;
-        //diffs = decodeDiffs();
+        decode_diffs();
     }
     if (! playback) {
         if (lc_time < 0) { lc_time = getTime(); }
@@ -138,6 +138,25 @@ track_changes = function() {
     }
 };
 
+function add_diff(diff) {
+    diffs.push(diff);
+    diff_str = diff[0] + ',' + diff[1] + ',' + encodeURIComponent(diff[2]) + ',' + diff[3] + ';';
+    document.getElementById('diffs').value += diff_str;
+}
+
+function decode_diffs() {
+    diff_str = document.getElementById('diffs').value;
+    diffs_ar = diff_str.split(';');
+    for (i = 0; i < diffs_ar.length; i++) {
+        diff_ar = diffs_ar[i].split(',');
+        diff = [];
+        diff[0] = parseInt(diff_ar[0]);
+        diff[1] = parseInt(diff_ar[1]);
+        diff[2] = decodeURIComponent(diff_ar[2]);
+        diff[3] = parseInt(diff_ar[3]);
+        diffs.push(diff);
+    }
+}
 
 deft.onmouseup = track_changes;
 deft.onmousemove = track_changes;
@@ -172,12 +191,6 @@ function commit() {
 function save() {
     buffer = getBuffer();
     buffers[current] = buffer;
-}
-
-function add_diff(diff) {
-    diffs.push(diff);
-    diff_str = diff[0] + ',' + diff[1] + ',' + "'" + encodeURIComponent(diff[2]) + "'" + ',' + diff[3] + ';';
-    document.getElementById('diffs').value += diff_str;
 }
 
 function do_cmd(f) {
