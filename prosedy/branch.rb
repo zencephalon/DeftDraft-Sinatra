@@ -12,6 +12,11 @@ class BranchManager
 
         return h_to_st(branch)
     end
+
+    def get(draft)
+        branch = @branch_db.find_one({d: draft._id})
+        return branch ? h_to_st(branch) : nil
+    end
         
     def h_to_st(h)
         branch = Branch.new

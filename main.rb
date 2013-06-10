@@ -12,6 +12,7 @@ set :bind, '0.0.0.0'
 $prosedy = Prosedy.new(Mongo::MongoClient.new('localhost', 27017))
 $writer_m = $prosedy.writer_m
 $draft_m = $prosedy.draft_m
+$branch_m = $prosedy.branch_m
 
 helpers do
     def logged_in?
@@ -60,15 +61,16 @@ end
 
     get "#{path}/:num", :auth => :writer do
         draft = $draft_m.get(writer._id, params[:num])
+        branch = $branch_m.get(draft)
         # load the drafts for this draft
-        #liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
-        "hello"
+        liquid :deftdraft, :layout => false, :locals => { title: draft.t, text: branch.et, diffs: branch.df }
     end
 
     get "#{path}/:num/view", :auth => :writer do
         draft = $draft_m.get(writer._id, params[:num])
+        branch = $branch_m.get(draft)
         # load the current draft for this draft
-        liquid :draft_display, :locals => { :title => draft.t, :text => "hello" }
+        liquid :draft_display, :locals => { :title => draft.t, :text => branch.et }
     end
 end
 
