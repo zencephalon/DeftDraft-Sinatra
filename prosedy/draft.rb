@@ -39,7 +39,7 @@ class DraftManager
 
     def update(w, title, content, diffs, branch_id_s)
         branch = @prosedy.branch_m.update(BSON::ObjectId.from_string(branch_id_s), content, diffs)
-        @draft_db.update(query: {_id: branch.d}, update: {'$set' => {t: title}})
+        @draft_db.update({_id: branch.d}, {'$set' => {t: title}})
     end
 
     def get(w, n)

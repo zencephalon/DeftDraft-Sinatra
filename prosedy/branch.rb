@@ -13,10 +13,10 @@ class BranchManager
         return h_to_st(branch)
     end
 
-    def update(branch_id, content, diffs) {
+    def update(branch_id, content, diffs)
         branch = @branch_db.find_and_modify(query: {_id: branch_id}, update: {'$set' => {et: content, df: diffs}})
         return branch ? h_to_st(branch) : nil
-    }
+    end
 
     def get(draft)
         branch = @branch_db.find_one({d: draft._id})
