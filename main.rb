@@ -79,19 +79,20 @@ end
     end
 end
 
-get "/w/:num_or_name/d/:d_id" do
-    w = $writer_m.get_by_id_or_name(params[:num_or_name])
-    draft = $draft_m.get(w._id, params[:d_id].to_i)
+get "/w/:name/d/:num" do
+    writer = $writer_m.find_by_name(params[:name])
+    draft = $draft_m.get(writer._id, params[:num])
+    branch = $branch_m.get(draft)
     # load the current draft for this draft
-    liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+    liquid :draft_display, :layout => false, :locals => { :title => draft.t, :text => RedCloth.new(branch.et).to_html, :starting_text => branch.st, :diffs => branch.df }
 end
 
 # ====================== Users ================================================
 
-get "/w/:num_or_name" do
-    w = $writer_m.find_by_name(params[:num_or_name])
+get "/w/:name" do
+    w = $writer_m.find_by_name(params[:name])
     drafts = $draft_m.get_by_writer(w._id)
-    liquid :draft_list, :locals => { :drafts => drafts }
+    liquid :public_draft_list, :locals => { drafts: drafts, writer: w.n }
 end
 
 get "/signup" do
