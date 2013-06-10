@@ -178,7 +178,7 @@ Buffer.prototype.toString = function() {
 }
 
 function getBuffer() {
-    return new Buffer(deft.value.replace(/ +/g, ' '), getCaret(deft));
+    return new Buffer(deft.value, getCaret(deft));
 }
 
 function commit() {
