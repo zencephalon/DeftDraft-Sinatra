@@ -32,8 +32,8 @@ class WriterManager
         (writer && writer.ph == BCrypt::Engine.hash_secret(password, writer.ps)) ? h_to_st(writer) : nil
     end
 
-    def inc_draft_c(name)
-        @writer_db.find_and_modify(query: {_id: name}, update: {'$inc' => {dc: 1}}, fields: ['dc'], new: true)['dc']
+    def inc_draft_c(id)
+        @writer_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, fields: {dc: true}, new: true)['dc']
     end
 
     def find_by_name(name)

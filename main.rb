@@ -45,7 +45,7 @@ end
 
 ["/draft", "/d"].each do |path|
     post "#{path}", :auth => :writer do
-        $draft_m.create(writer._id, params[:title], params[:deft])
+        $draft_m.create(writer, params[:title], params[:deft])
         redirect '/'
     end
 

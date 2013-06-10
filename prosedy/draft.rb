@@ -1,6 +1,5 @@
-
-#                  id    user id  numeric id  current revision  revision count  title
-Draft = Struct.new :_id, :w,    :n,         :cr,              :rc,            :t
+# id, writer, numeric id, title
+Draft = Struct.new :_id, :w, :n, :t
 
 class DraftManager
 
@@ -9,19 +8,16 @@ class DraftManager
         @draft_db = @prosedy.db.collection('drafts')
     end
 
-    def create(wid, title, content)
-        nid = @prosedy.writer_m.inc_draft_c(wid)
+    def create(w, title, content)
+        nid = @prosedy.writer_m.inc_draft_c(w._id)
 
-        draft_id = BSON::ObjectId.new
-        revision_id = BSON::ObjectId.new
+        #draft_id = BSON::ObjectId.new
+        #revision_id = BSON::ObjectId.new
 
         draft = {   
-            _id: draft_id,
-            w: wid, 
+            w: w._id, 
             n: nid, 
             t: title,
-            cr: revision_id,
-            rc: 1,
         }
 
         @draft_db.insert(draft)
