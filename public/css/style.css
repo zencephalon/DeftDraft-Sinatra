@@ -4,9 +4,6 @@ body {
   font-family: 'Crimson Text', serif;
   background-color: #EBF7F8;
   font-size: 1.2em;
-  background-image: url(/img/square_bg.png);
-  background-size: auto;
-  background-repeat: repeat repeat;
 }
       
 h1 {
