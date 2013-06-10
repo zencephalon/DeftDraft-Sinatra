@@ -38,6 +38,6 @@ class DraftManager
     end
 
     def get_by_writer(w)
-        @draft_db.find({:w => w}).to_a.map {|h| h_to_st(h)}
+        @draft_db.find({:w => w}).to_a
     end
 end

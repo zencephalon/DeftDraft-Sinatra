@@ -1,5 +1,5 @@
 <ul>
-{% for doc in docs %}
-    <li><a href="/draft/{{doc.nid}}">{{ doc.title }}</a></li>
+{% for draft in drafts %}
+    <li><a href="/draft/{{draft.n}}">{{ draft.t }}</a></li>
 {% endfor %}
 </ul>
