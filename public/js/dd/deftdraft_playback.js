@@ -12,6 +12,13 @@ var pb_dir = 1;
 
 var just_loaded = true;
 
+var deft = document.getElementById('deft');
+
+function switch_playback() {
+    decode_diffs();
+
+}
+
 function start_pb() {
     playback = true;
     pb_paused = false;
@@ -42,17 +49,17 @@ function step_pb() {
     diff = diffs[pb_pointer];
 
     if (diff[0] == 1) {
-        pb_text = deft.value;
+        pb_text = deft.innerHTML;
         start = pb_text.slice(0, diff[1]);
         end = pb_text.slice(diff[1]);
-        deft.value = start + diff[2] + end;
+        deft.innerHTML = start + diff[2] + end;
     }
 
     if (diff[0] == 0) {
-        pb_text = deft.value;
+        pb_text = deft.innerHTML;
         start = pb_text.slice(0, diff[1] - diff[2].length);
         end = pb_text.slice(diff[1]);
-        deft.value = start + end;
+        deft.innerHTML = start + end;
     }
 
     pb_pointer += pb_dir;
@@ -85,16 +92,12 @@ function Buffer(text, cursor) {
 }
 
 Buffer.prototype.set = function() {
-    deft.value = this.text;
+    deft.innerHTML = this.text;
     setCaret(deft, this.cursor);
 }
 
 Buffer.prototype.toString = function() {
     return this.cursor + ":" + this.text;
-}
-
-function getBuffer() {
-    return new Buffer(deft.value.replace(/ +/g, ' '), getCaret(deft));
 }
 
 function status() {
