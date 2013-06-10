@@ -3,6 +3,7 @@ require 'bundler/setup'
 
 require 'sinatra'
 require 'mongo'
+require 'redcloth'
 
 require_relative './prosedy/prosedy'
 
@@ -74,7 +75,7 @@ end
         draft = $draft_m.get(writer._id, params[:num])
         branch = $branch_m.get(draft)
         # load the current draft for this draft
-        liquid :draft_display, :locals => { :title => draft.t, :text => branch.et }
+        liquid :draft_display, :locals => { :title => draft.t, :text => RedCloth.new(branch.et).to_html }
     end
 end
 

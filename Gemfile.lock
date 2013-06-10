@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.2.9)
     bcrypt-ruby (3.0.1)
     bson (1.8.5)
     haml (4.0.2)
@@ -21,6 +22,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   bcrypt-ruby
   haml
   liquid

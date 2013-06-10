@@ -1,5 +1,5 @@
 # id, writer, numeric id, title
-Draft = Struct.new :_id, :w, :n, :t, :b
+Draft = Struct.new :_id, :w, :n, :t, :b, :mk
 
 class DraftManager
     def initialize(prosedy)
@@ -29,7 +29,8 @@ class DraftManager
             w: w._id, 
             n: nid, 
             t: title,
-            b: branch_id
+            b: branch_id,
+            mk: "textile"
         }
 
         @draft_db.insert(draft)
