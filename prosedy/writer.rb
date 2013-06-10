@@ -39,10 +39,7 @@ class WriterManager
     end
 
     def inc_draft_c(id)
-        #File.open("log","w+") do |f|
-           @writer_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, fields: {dc: true}, new: true)['dc']
-        #end
-        #return 1;
+        @writer_db.find_and_modify(query: {_id: id}, update: {'$inc' => {dc: 1}}, fields: {dc: true}, new: true)['dc']
     end
 
     def find_by_name(name)
