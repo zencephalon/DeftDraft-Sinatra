@@ -27,7 +27,7 @@ class DraftManager
     end
 
     def get(w, n)
-        draft = @draft_db.find_one({:w => w, :n => n})
+        draft = @draft_db.find_one({:w => w, :n => n.to_i})
         return draft ? h_to_st(draft) : nil
     end
 

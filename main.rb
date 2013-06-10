@@ -59,15 +59,16 @@ end
     end
 
     get "#{path}/:num", :auth => :writer do
-        draft = $draft_m.get(writer._id, params[:num].to_i)
+        draft = $draft_m.get(writer._id, params[:num])
         # load the drafts for this draft
         #liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
+        "hello"
     end
 
     get "#{path}/:num/view", :auth => :writer do
-        draft = $draft_m.get(writer._id, params[:num].to_i)
+        draft = $draft_m.get(writer._id, params[:num])
         # load the current draft for this draft
-        liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
+        liquid :draft_display, :locals => { :title => draft.t, :text => "hello" }
     end
 end
 
