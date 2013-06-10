@@ -36,19 +36,19 @@ set(:auth) do |roles|
 end
 
 get "/" do
-    liquid :index, :locals => { :writer => writer ? writer.n : nil, :logged_in => logged_in?, :title => "Welcome!" }
+    liquid :index, :locals => { :writer => writer ? writer._id : nil, :logged_in => logged_in?, :title => "Welcome!" }
 end
 
 # ====================== Drafts ===============================================
 
 ["/draft", "/d"].each do |path|
     post "#{path}", :auth => :writer do
-        $draft_m.create(writer.id, params[:title], params[:deft])
+        $draft_m.create(writer._id, params[:title], params[:deft])
         redirect '/'
     end
 
     get "#{path}", :auth => :writer do
-        drafts = $draft_m.get_by_uid(writer.id)
+        drafts = $draft_m.get_by_writer(writer._id)
         liquid :draft_list, :locals => { :drafts => drafts }
     end
 
@@ -57,21 +57,21 @@ end
     end
 
     get "#{path}/:num", :auth => :writer do
-        draft = $draft_m.get(writer.id, params[:num].to_i)
+        draft = $draft_m.get(writer._id, params[:num].to_i)
         # load the drafts for this draft
         #liquid :deftdraft, :layout => false, :locals => { title: draft.title, text: draft.content }
     end
 
     get "#{path}/:num/view", :auth => :writer do
-        draft = $draft_m.get(writer.id, params[:num].to_i)
+        draft = $draft_m.get(writer._id, params[:num].to_i)
         # load the current draft for this draft
         liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
     end
 end
 
 get "/w/:num_or_name/d/:d_id" do
-    u = $writer_m.get_by_id_or_name(params[:num_or_name])
-    draft = $draft_m.get(u.id, params[:d_id].to_i)
+    w = $writer_m.get_by_id_or_name(params[:num_or_name])
+    draft = $draft_m.get(w._id, params[:d_id].to_i)
     # load the current draft for this draft
     liquid :draft_display, :locals => { :title => draft.title, :text => draft.content }
 end
@@ -79,8 +79,8 @@ end
 # ====================== Users ================================================
 
 get "/w/:num_or_name" do
-    u = $writer_m.get_by_id_or_name(params[:num_or_name])
-    drafts = $draft_m.get_by_uid(u.id)
+    w = $writer_m.get_by_id_or_name(params[:num_or_name])
+    drafts = $draft_m.get_by_uid(w._id)
     liquid :draft_list, :locals => { :drafts => drafts }
 end
 

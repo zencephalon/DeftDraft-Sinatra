@@ -10,7 +10,7 @@ class DraftManager
     end
 
     def create(wid, title, content)
-        nid = @prosedy.writer_m.inc_draft_c(uid)
+        nid = @prosedy.writer_m.inc_draft_c(wid)
 
         draft_id = BSON::ObjectId.new
         revision_id = BSON::ObjectId.new
