@@ -37,6 +37,11 @@ class DraftManager
         return h_to_st(draft)
     end
 
+    def update(w, title, content, diffs, branch_id_s)
+        branch = @prosedy.branch_m.update(BSON::ObjectId.from_string(branch_id_s), content, diffs)
+        @draft_db.update(query: {_id: branch.d}, update: {'$set' => {t: title}})
+    end
+
     def get(w, n)
         draft = @draft_db.find_one({:w => w, :n => n.to_i})
         return draft ? h_to_st(draft) : nil

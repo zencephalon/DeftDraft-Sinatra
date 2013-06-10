@@ -46,7 +46,11 @@ end
 
 ["/draft", "/d"].each do |path|
     post "#{path}", :auth => :writer do
-        $draft_m.create(writer, params[:title], params[:deft], params[:diffs])
+        if params[:branch].empty?
+            $draft_m.create(writer, params[:title], params[:deft], params[:diffs])
+        else
+            $draft_m.update(writer, params[:title], params[:deft], params[:diffs], params[:branch])
+        end
         redirect '/'
     end
 
@@ -63,7 +67,7 @@ end
         draft = $draft_m.get(writer._id, params[:num])
         branch = $branch_m.get(draft)
         # load the drafts for this draft
-        liquid :deftdraft, :layout => false, :locals => { title: draft.t, text: branch.et, diffs: branch.df }
+        liquid :deftdraft, :layout => false, :locals => { title: draft.t, text: branch.et, diffs: branch.df, branch: branch._id.to_s }
     end
 
     get "#{path}/:num/view", :auth => :writer do

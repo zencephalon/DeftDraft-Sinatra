@@ -28,6 +28,7 @@
         <h2>DD - <span id="buffers">Draft: <b>1</b>/1 - Commit: 0</span></h2>
         <form action="/draft" method="post">
             <input type="hidden" id="diffs" name="diffs" value="{{diffs}}"/>
+            <input type="hidden" id="branch" name="branch" value="{{branch}}"/>
             <textarea class="textarea mousetrap" id="deft" name="deft" placeholder="Once upon a time in a land far, far away...">{{text}}</textarea>
             <div id="sidebar">
                 <input type="text" id="title" name="title" placeholder="The Story without a Title" value="{{title}}">
