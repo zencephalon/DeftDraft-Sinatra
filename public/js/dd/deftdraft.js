@@ -159,8 +159,9 @@ function decode_diffs() {
 }
 
 deft.onmouseup = track_changes;
-deft.onmousemove = track_changes;
+//deft.onmousemove = track_changes;
 deft.onkeyup = track_changes;
+document.selectionchange = track_changes;
 
 //deft.oninput = track_changes;
 
