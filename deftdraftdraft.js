@@ -100,27 +100,34 @@ track_changes = function() {
         //now_cursor_pos = getCaret(deft);
 
         d_tx = now_text.length - text.length;
-        d_cr = now_sel.start - sel.start;
+        d_ss = now_sel.start - sel.start;
+        d_se = now_sel.end - sel.end;
+        //d_cr = now_sel.start - sel.start;
 
         if (! special_cmd) {
-            if (now_text == text) {
-                change_type = "no change";
-            } else {
-                change_time = getTime(); 
-                d_t = change_time - lc_time;
-                changes++;
+            change_time = getTime(); 
+            d_t = change_time - lc_time;
+            changes++;
 
-                if (d_tx == d_cr) {
+            if (now_text == text) {
+                change_type = "selection change";
+                diff = [0, d_ss, d_se, '', d_t];
+                add_diff(diff);
+            } else {
+                // no selections involved
+                if ((now_sel.start - now_sel.end) == 0 && (sel.start - sel.end) == 0) {
                     if (now_text.length > text.length) {
                         change_type = "simple insert";
-                        diff = [1, cursor_pos, now_text.substr(cursor_pos, d_cr), d_t];
+                        diff = [1, d_ss, d_se, now_text.substr(sel.start, d_tx), d_t];
                         add_diff(diff);
                     } else {
                         change_type = "simple delete";
-                        diff = [0, cursor_pos, text.substr(now_cursor_pos, -d_tx), d_t];
+                        diff = [-1, d_ss, d_se, text.substr(now_sel.start, -d_tx), d_t];
                         add_diff(diff);
                     }
-                } else {
+                }
+
+                {
                     change_type = "composite";
                     diff = [0, cursor_pos, text.substr(cursor_pos, d_cr - d_tx), d_t];
                     add_diff(diff);
