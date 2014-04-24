@@ -1,0 +1,5 @@
+<ul>
+{% for draft in drafts %}
+    <li><a href="/draft/{{draft.n}}/edit">{{ draft.t }}</a> : <a href="/draft/{{draft.n}}/view">view</a></li>
+{% endfor %}
+</ul>

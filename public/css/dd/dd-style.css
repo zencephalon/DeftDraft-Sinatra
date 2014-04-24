@@ -1,0 +1,37 @@
+body {
+    background-color: #EBF7F8;
+}
+#deft {
+    float: left;
+    font-size: 1.4em;
+    margin-right: 30px;
+    background-color: #fff;
+    width: 30em;
+    height: 30em;
+    position: relative;
+    margin-bottom: 6em;
+    border-width: 3px;
+    border-color: #88ACB2;
+    outline-color: #D0E0EB;
+    outline-style: solid;
+}
+#title {
+    background-color: #fff;
+    border-style: none;
+    padding: 5px;
+    outline-width: 1px;
+    outline-color: #D0E0EB;
+    outline-style: solid;
+}
+#buffers {
+    text-align: right;
+}
+#container {
+    margin: 0px auto;
+    max-width: 60em;
+}
+#sidebar {
+}
+.highlight {
+    background-color: #ffeeee;
+}

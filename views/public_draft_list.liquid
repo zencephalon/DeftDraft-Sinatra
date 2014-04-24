@@ -1,0 +1,6 @@
+<h2>{{ writer }}’s drafts</h2>
+<ul>
+{% for draft in drafts %}
+    <li><a href="/w/{{ writer }}/d/{{ draft.n }}">{{ draft.t }}</a></li>
+{% endfor %}
+</ul>

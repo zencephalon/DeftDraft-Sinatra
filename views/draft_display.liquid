@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta charset="utf-8">
+
+<title>DeftDraft</title>
+
+<script src="/js/dd/mousetrap.min.js"></script>
+<!-- include jQuery library -->
+<script type="text/javascript" src="/js/dd/jquery.min.js"></script>
+<script src="/js/dd/jquery.autosize.js"></script>
+<link rel="stylesheet" href="/css/style.css">
+
+<script>
+    $(function(){
+        $('#deft').autosize({callback:
+            function() {
+                $('html, body').animate({ scrollTop: $(document).height()-$(window).height()}, 400, "swing");
+            }
+        });
+    });
+</script>
+
+</head>
+<body>
+    <div id="content">
+        <input type="hidden" id="diffs" name="diffs" value="{{diffs}}"/>
+        <h2>{{title}}
+            <div id="buffers" style="display:none; font-size:50%; margin-left:2em;"></div>
+            <span style="float: right; font-size:50%;">
+                <a href="#" id="playback_button" onclick="switch_playback()">view playback</a>
+            </span>
+        </h2>
+        <div id="text">
+            {{text}}
+        </div>
+        
+        <div id="deft" style="display:none;">{{starting_text}}</div>
+
+        <footer>
+        <hr>
+        Made with love in 2013.
+        </footer>
+    </div>
+</body>
+<script src="/js/dd/caret.js"></script>
+<script src="/js/dd/deftdraft_playback.js"></script>
+</html>
