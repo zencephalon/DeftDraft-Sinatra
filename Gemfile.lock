@@ -9,9 +9,8 @@ GEM
     liquid (2.5.0)
     mongo (1.8.5)
       bson (~> 1.8.5)
-    puma (2.1.0)
-      rack (>= 1.1, < 2.0)
-    rack (1.5.2)
+    puma (3.12.6)
+    rack (1.6.13)
     rack-protection (1.5.0)
       rack
     sinatra (1.4.2)
